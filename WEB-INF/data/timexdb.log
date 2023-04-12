@@ -1,0 +1,27 @@
+CREATE USER SA PASSWORD "" ADMIN
+/*C1*/SET SCHEMA PUBLIC
+CONNECT USER SA
+DROP TABLE Department IF EXISTS
+\u000aDROP TABLE Employee IF EXISTS
+\u000aDROP TABLE Timesheet IF EXISTS
+\u000aDROP INDEX TimesheetIndex IF EXISTS
+\u000aDROP INDEX DepartmentCodeIndex IF EXISTS
+\u000aDROP INDEX EmployeeIdIndex IF EXISTS
+\u000a\u000a-- Step 2: Create tables\u000aCREATE TABLE Department\u000a(\u000a   departmentCode CHAR(2) NOT NULL,\u000a   name VARCHAR(255) NOT NULL\u000a)
+\u000a\u000aCREATE TABLE Employee\u000a(\u000a   employeeId INT NOT NULL,\u000a   name VARCHAR(100) NOT NULL,\u000a   email VARCHAR(255) NOT NULL,\u000a   employeeCode CHAR(1) NOT NULL,\u000a   password VARCHAR(10) NOT NULL,\u000a   managerEmployeeId INT NULL\u000a)
+\u000a\u000aCREATE TABLE Timesheet\u000a(\u000a   timesheetId IDENTITY NOT NULL,\u000a   employeeId INT NOT NULL,\u000a   statusCode CHAR(1) NOT NULL,\u000a   periodEndingDate DATE NOT NULL,\u000a   departmentCode CHAR(4) NOT NULL,\u000a   minutesMon INT NULL,\u000a   minutesTue INT NULL,\u000a   minutesWed INT NULL,\u000a   minutesThu INT NULL,\u000a   minutesFri INT NULL,\u000a   minutesSat INT NULL,\u000a   minutesSun INT NULL\u000a)
+\u000a\u000a-- Step 3: Create indexes\u000aCREATE UNIQUE INDEX TimesheetIndex ON Timesheet (employeeId, periodEndingDate)
+\u000aCREATE UNIQUE INDEX DepartmentCodeIndex ON Department (departmentCode)
+\u000aCREATE UNIQUE INDEX EmployeeIdIndex ON Employee (employeeId)
+INSERT INTO DEPARTMENT VALUES('AC','Accounting')
+INSERT INTO DEPARTMENT VALUES('CS','Customer Support')
+INSERT INTO DEPARTMENT VALUES('HR','Human Resources')
+INSERT INTO DEPARTMENT VALUES('IT','Information Technology')
+INSERT INTO EMPLOYEE VALUES(1,'Mike Dover','mdover@acme.com','H','rapidjava',3)
+INSERT INTO EMPLOYEE VALUES(2,'Ajay Kumar','akumar@acme.com','H','visualpatterns',3)
+INSERT INTO EMPLOYEE VALUES(3,'Teresa Walker','twalker@acme.com','M','agilestuff',4)
+INSERT INTO EMPLOYEE VALUES(4,'Tom Brady','tbrady@acme.com','E','superbowl',NULL)
+INSERT INTO TIMESHEET VALUES(1,2,'P','2006-08-19','IT',480,480,360,480,480,0,0)
+INSERT INTO TIMESHEET VALUES(2,1,'A','2006-08-19','HR',0,0,480,480,480,0,0)
+/*C2*/SET SCHEMA PUBLIC
+CONNECT USER SA

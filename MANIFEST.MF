@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Class-Path: jdom.jar xerces.jar msbase.jar mssqlserver.jar msutil.jar Absolute.jar kunststoff.jar
+Created-By: NetBeans IDE
+Specified-By: prjDB.jarContent
+Main-Class: sowbreira.DB.mainFrame
+
