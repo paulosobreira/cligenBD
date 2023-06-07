@@ -101,9 +101,9 @@ public class MainFrame extends javax.swing.JFrame {
 		sobre.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String msg = "Feito por Paulo Sobreira \n"
-						+ "sowbreira@yahoo.com.br \n"
-						+ "http://br.geocities.com/sowbreira/ \n"
-						+ "Janeiro de 2003";
+						+ "sowbreira@gmail.com.br \n"
+						+ "https://sowbreira-26fe1.firebaseapp.com/ \n"
+						+ "Janeiro de 2003 - Junho 2023";
 				JOptionPane.showMessageDialog(MainFrame.this, msg, "Sobre",
 						JOptionPane.INFORMATION_MESSAGE);
 			}

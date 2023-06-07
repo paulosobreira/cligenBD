@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="libs/classes12.jar"/>
+	<classpathentry kind="lib" path="libs/hsqldb.jar"/>
+	<classpathentry kind="lib" path="libs/jdom.jar"/>
+	<classpathentry kind="lib" path="libs/jtds-1.2.jar"/>
+	<classpathentry kind="lib" path="libs/msbase.jar"/>
+	<classpathentry kind="lib" path="libs/mssqlserver.jar"/>
+	<classpathentry kind="lib" path="libs/msutil.jar"/>
+	<classpathentry kind="lib" path="libs/mysql-connector-java-5.0.7-bin.jar"/>
+	<classpathentry kind="lib" path="libs/pg74.216.jdbc2.jar"/>
+	<classpathentry kind="lib" path="libs/xerces.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

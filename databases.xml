@@ -1,81 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-    Document   : databases.xml
-    Created on : 12 de Maio de 2003, 20:19
-    Author     : Paulo Sobreira
-    Description:
-        Purpose of the document follows.
--->
+<!-- Document : databases.xml Created on : 12 de Maio de 2003, 20:19 Author 
+	: Paulo Sobreira Description: Purpose of the document follows. -->
 
 <root>
-   <db>
-    <dbdriver>
-    org.hsqldb.jdbcDriver
-    </dbdriver>
-    <dburl>
-    jdbc:hsqldb:hsql://localhost/cligenBD
-    </dburl>
-   </db>
-   <db>
-    <dbdriver>
-    oracle.jdbc.driver.OracleDriver
-    </dbdriver>
-    <dburl>
-    jdbc:oracle:thin:@128.1.0.62:1521:prod
-    </dburl>
-   </db>
-   <db>
-    <dbdriver>
-    org.postgresql.Driver
-    </dbdriver>
-    <dburl>
-    jdbc:postgresql://192.168.1.11/UniDesenv
-    </dburl>
-   </db>
-   <db>
-    <dbdriver>net.sourceforge.jtds.jdbc.Driver
-    </dbdriver>
-    <dburl>jdbc:jtds:sqlserver://192.168.1.4:1433;databasename=Teste
-    </dburl>
-   </db>
-   <db>
-    <dbdriver>
-    sun.jdbc.odbc.JdbcOdbcDriver
-    </dbdriver>
-    <dburl>
-    jdbc:odbc:simples
-    </dburl>
-   </db>
-   <db>
-    <dbdriver>
-    com.pointbase.jdbc.jdbcDriver
-    </dbdriver>
-    <dburl>
-    jdbc:pointbase:corejava
-    </dburl>
-   </db>
-   <db>
-    <dbdriver>
-    com.microsoft.jdbc.sqlserver.SQLServerDriver
-    </dbdriver>
-    <dburl>
-    jdbc:microsoft:sqlserver://localhost
-    </dburl>
-    </db>
-    <db>
-    <dbdriver>
-    org.gjt.mm.mysql.Driver
-    </dbdriver>
-    <dburl>
-    jdbc:mysql://128.1.0.201:3306/dw
-    </dburl>
-   </db>
-
-   <db>
-    <dbdriver>
-    </dbdriver>
-    <dburl>
-    </dburl>
-   </db>
+	<db>
+		<dbdriver>
+			org.hsqldb.jdbcDriver
+		</dbdriver>
+		<dburl>
+			jdbc:hsqldb:hsql://localhost/cligenBD
+		</dburl>
+	</db>
+	<db>
+		<dbdriver>
+			oracle.jdbc.driver.OracleDriver
+		</dbdriver>
+		<dburl>
+			jdbc:oracle:thin:@128.1.0.62:1521:prod
+		</dburl>
+	</db>
+	<db>
+		<dbdriver>
+			org.postgresql.Driver
+		</dbdriver>
+		<dburl>
+			jdbc:postgresql://192.168.1.11/UniDesenv
+		</dburl>
+	</db>
+	<db>
+		<dbdriver>net.sourceforge.jtds.jdbc.Driver
+		</dbdriver>
+		<dburl>jdbc:jtds:sqlserver://192.168.1.4:1433;databasename=Teste
+		</dburl>
+	</db>
+	<db>
+		<dbdriver>
+			sun.jdbc.odbc.JdbcOdbcDriver
+		</dbdriver>
+		<dburl>
+			jdbc:odbc:simples
+		</dburl>
+	</db>
+	<db>
+		<dbdriver>
+			com.pointbase.jdbc.jdbcDriver
+		</dbdriver>
+		<dburl>
+			jdbc:pointbase:corejava
+		</dburl>
+	</db>
+	<db>
+		<dbdriver>
+			com.microsoft.jdbc.sqlserver.SQLServerDriver
+		</dbdriver>
+		<dburl>
+			jdbc:microsoft:sqlserver://localhost
+		</dburl>
+	</db>
+	<db>
+		<dbdriver>
+			org.gjt.mm.mysql.Driver
+		</dbdriver>
+		<dburl>
+			jdbc:mysql://172.20.100.195:3306/moodle?characterEncoding=utf8
+		</dburl>
+	</db>
+	<db>
+		<dbdriver>
+		</dbdriver>
+		<dburl>
+		</dburl>
+	</db>
 </root>
