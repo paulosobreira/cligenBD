@@ -1,4 +1,4 @@
-package sowbreira.DB;
+package br.nnpe.cligen;
 
 import java.awt.*;
 import java.awt.event.*;

@@ -5,6 +5,9 @@
 
 <root>
 	<db>
+		<name>
+			HSQL
+		</name>
 		<dbdriver>
 			org.hsqldb.jdbcDriver
 		</dbdriver>
@@ -13,6 +16,9 @@
 		</dburl>
 	</db>
 	<db>
+		<name>
+			Oracle
+		</name>
 		<dbdriver>
 			oracle.jdbc.driver.OracleDriver
 		</dbdriver>
@@ -21,6 +27,9 @@
 		</dburl>
 	</db>
 	<db>
+		<name>
+			Postgres
+		</name>
 		<dbdriver>
 			org.postgresql.Driver
 		</dbdriver>
@@ -29,12 +38,18 @@
 		</dburl>
 	</db>
 	<db>
+		<name>
+			SqlServer 1
+		</name>
 		<dbdriver>net.sourceforge.jtds.jdbc.Driver
 		</dbdriver>
 		<dburl>jdbc:jtds:sqlserver://192.168.1.4:1433;databasename=Teste
 		</dburl>
 	</db>
 	<db>
+		<name>
+			Odbc
+		</name>
 		<dbdriver>
 			sun.jdbc.odbc.JdbcOdbcDriver
 		</dbdriver>
@@ -43,6 +58,9 @@
 		</dburl>
 	</db>
 	<db>
+		<name>
+			Pointbase
+		</name>
 		<dbdriver>
 			com.pointbase.jdbc.jdbcDriver
 		</dbdriver>
@@ -51,6 +69,9 @@
 		</dburl>
 	</db>
 	<db>
+		<name>
+			SqlServer 2
+		</name>
 		<dbdriver>
 			com.microsoft.jdbc.sqlserver.SQLServerDriver
 		</dbdriver>
@@ -59,6 +80,9 @@
 		</dburl>
 	</db>
 	<db>
+		<name>
+			Mysql
+		</name>
 		<dbdriver>
 			org.gjt.mm.mysql.Driver
 		</dbdriver>

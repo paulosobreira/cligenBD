@@ -1,4 +1,4 @@
-package sowbreira.DB;
+package br.nnpe.cligen;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

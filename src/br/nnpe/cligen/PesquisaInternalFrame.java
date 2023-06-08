@@ -1,4 +1,4 @@
-package sowbreira.DB;
+package br.nnpe.cligen;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -47,8 +47,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 	private javax.swing.JTable jTableResultado;
 	private String tbName;
 
-	public PesquisaInternalFrame(ResultSetTableModel amodel, String aTBname,
-			Statement astmt) {
+	public PesquisaInternalFrame(ResultSetTableModel amodel, String aTBname, Statement astmt) {
 		super();
 		this.tbName = aTBname;
 		numJanela++;
@@ -95,19 +94,17 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 		setResizable(true);
 		jPanelResultado.setLayout(new java.awt.BorderLayout());
 		new ExcelAdapter(jTableResultado);
-		jTableResultado.setModel(new javax.swing.table.DefaultTableModel(
-				new Object[][] {}, new String[] {}));
+		jTableResultado.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] {}));
 		jScrollPaneResultadoPesquisa.setViewportView(jTableResultado);
 		jTableResultado.setAutoCreateRowSorter(true);
 
 		jTableResultado.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		jTableResultado.getModel().addTableModelListener(
-				new TableModelListener() {
+		jTableResultado.getModel().addTableModelListener(new TableModelListener() {
 
-					public void tableChanged(TableModelEvent e) {
-						initColumnSizes(jTableResultado);
-					}
-				});
+			public void tableChanged(TableModelEvent e) {
+				initColumnSizes(jTableResultado);
+			}
+		});
 
 		jPanelConsulta.setLayout(new java.awt.BorderLayout());
 
@@ -118,8 +115,8 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 		jTextAreaCampos = new JTextArea(25, 18);
 		jTextAreaCampos.setBackground(MainFrame.bgColor);
 
-		JSplitPane splitPaneSup = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				jScrollPane2, new JScrollPane(jTextAreaCampos));
+		JSplitPane splitPaneSup = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPane2,
+				new JScrollPane(jTextAreaCampos));
 		jTextAreaCampos.setFont(new Font("Arial", Font.BOLD, 16));
 		jTextAreaConsulta.setFont(new Font("Arial", Font.BOLD, 16));
 		splitPaneSup.setContinuousLayout(true);
@@ -128,19 +125,19 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 		jPanelConsulta.add(splitPaneSup, java.awt.BorderLayout.CENTER);
 		botoesSQLPanel.setLayout(new java.awt.GridLayout(1, 0));
 
-		consulta.setText("Exec Consulta");
+		consulta.setText("Consulta F5");
 		consulta.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton1ActionPerformed(evt);
+				executarConsulta();
 			}
 		});
 
 		botoesSQLPanel.add(consulta);
 
-		atualiza.setText("Exec Atualiza\u00e7\u00e3o");
+		atualiza.setText("Atualização");
 		atualiza.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				updateActionPerformed(evt);
+				atualizacao();
 			}
 		});
 
@@ -148,8 +145,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 
 		jPanelConsulta.add(botoesSQLPanel, java.awt.BorderLayout.SOUTH);
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-				jPanelConsulta, jScrollPaneResultadoPesquisa);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, jPanelConsulta, jScrollPaneResultadoPesquisa);
 		splitPane.setContinuousLayout(true);
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(300);
@@ -184,14 +180,12 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 		TableColumn column = null;
 		Component comp = null;
 		int headerWidth = 0;
-		TableCellRenderer headerRenderer = table.getTableHeader()
-				.getDefaultRenderer();
+		TableCellRenderer headerRenderer = table.getTableHeader().getDefaultRenderer();
 
 		for (int i = 0; i < model.getColumnCount(); i++) {
 			column = table.getColumnModel().getColumn(i);
 
-			comp = headerRenderer.getTableCellRendererComponent(null, column
-					.getHeaderValue(), false, false, 0, 0);
+			comp = headerRenderer.getTableCellRendererComponent(null, column.getHeaderValue(), false, false, 0, 0);
 			headerWidth = comp.getPreferredSize().width + 50;
 			column.setMinWidth(headerWidth);
 		}
@@ -213,8 +207,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 			public void actionPerformed(ActionEvent e) {
 				StringBuffer buffer = new StringBuffer();
 				if (jTableResultado.getModel() instanceof ResultSetTableModel) {
-					ResultSetTableModel model = (ResultSetTableModel) jTableResultado
-							.getModel();
+					ResultSetTableModel model = (ResultSetTableModel) jTableResultado.getModel();
 
 					buffer.append("(");
 					for (int i = 1; i < model.getColumnCount(); i++) {
@@ -227,8 +220,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 					}
 				}
 				String result = buffer.toString();
-				adicionarTemplate("insert into " + tbName + " " + result
-						+ " values " + result + ";");
+				adicionarTemplate("insert into " + tbName + " " + result + " values " + result + ";");
 
 			}
 
@@ -239,8 +231,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 			public void actionPerformed(ActionEvent e) {
 				StringBuffer buffer = new StringBuffer();
 				if (jTableResultado.getModel() instanceof ResultSetTableModel) {
-					ResultSetTableModel model = (ResultSetTableModel) jTableResultado
-							.getModel();
+					ResultSetTableModel model = (ResultSetTableModel) jTableResultado.getModel();
 					int[] selectsCols = jTableResultado.getSelectedColumns();
 					boolean vaiTodas = false;
 					if (selectsCols.length == 0) {
@@ -266,8 +257,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 						}
 					}
 				}
-				adicionarTemplate("update " + tbName + " set "
-						+ buffer.toString() + " where ? ;");
+				adicionarTemplate("update " + tbName + " set " + buffer.toString() + " where ? ;");
 
 			}
 
@@ -288,8 +278,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 			public void actionPerformed(ActionEvent e) {
 				StringBuffer buffer = new StringBuffer();
 				if (jTableResultado.getModel() instanceof ResultSetTableModel) {
-					ResultSetTableModel amodel = (ResultSetTableModel) jTableResultado
-							.getModel();
+					ResultSetTableModel amodel = (ResultSetTableModel) jTableResultado.getModel();
 					if (amodel == null) {
 						return;
 					}
@@ -302,8 +291,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 						if (tipoCampo != null) {
 							tipoCampo = tipoCampo.toLowerCase().trim();
 						}
-						buffer.append(nomeCampo + " - " + tipoCampo
-								+ amodel.isNullable(i) + "\n");
+						buffer.append(nomeCampo + " - " + tipoCampo + amodel.isNullable(i) + "\n");
 
 					}
 				}
@@ -324,47 +312,35 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 
 	// GEN-LAST:event_jButton3ActionPerformed
 
-	private void updateActionPerformed(java.awt.event.ActionEvent evt) { // GEN-FIRST:event_jButton2ActionPerformed
+	private void atualizacao() { // GEN-FIRST:event_jButton2ActionPerformed
 
 		// Add your handling code here:
 		try {
 			String query = jTextAreaConsulta.getSelectedText();
 			int afetados = 0;
 			if ("".equals(query) || (query == null)) {
-				query = jTextAreaConsulta.getText();
+				throw new Exception("Selecione um DML");
 			}
 			if (query.indexOf(";") != -1) {
-				String[] querys = query.split(";");
-				for (int i = 0; i < querys.length; i++) {
-					if ("".equals(querys[i])) {
-						continue;
-					}
-					afetados += stmt.executeUpdate(querys[i]);
-				}
-			} else {
-				afetados = stmt.executeUpdate(query);
+				query = query.replace(";", "");
 			}
+			afetados = stmt.executeUpdate(query);
+
 			String txt = "Linhas afetadas: " + afetados + " = " + query.trim();
-			JOptionPane.showMessageDialog(this, txt, "Atualização Concluida",
-					JOptionPane.INFORMATION_MESSAGE);
-		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(this, txt, "Atualização Concluida", JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
 			JTextArea ta = new JTextArea(3, 15);
 			ta.setText(e.toString());
-			JOptionPane.showMessageDialog(this, ta, "Erro SQL",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ta, "Erro SQL", JOptionPane.ERROR_MESSAGE);
 		}
 	} // GEN-LAST:event_jButton2ActionPerformed
-
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) { // GEN-FIRST:event_jButton1ActionPerformed
-		executarConsulta();
-	} // GEN-LAST:event_jButton1ActionPerformed
 
 	private void executarConsulta() {
 		try {
 			String query = jTextAreaConsulta.getSelectedText();
 
 			if ("".equals(query) || (query == null)) {
-				query = jTextAreaConsulta.getText();
+				throw new Exception("Selecione uma consulta");
 			}
 			if (query.indexOf(";") != -1) {
 				query = query.replace(";", "");
@@ -373,11 +349,10 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 			ResultSet rs = stmt.executeQuery(query);
 			jTableResultado.setModel(new CachingResultSetTableModel(rs));
 			initColumnSizes(jTableResultado);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			JTextArea ta = new JTextArea(3, 15);
 			ta.setText(e.toString());
-			JOptionPane.showMessageDialog(this, ta, "Erro SQL",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, ta, "Erro SQL", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 

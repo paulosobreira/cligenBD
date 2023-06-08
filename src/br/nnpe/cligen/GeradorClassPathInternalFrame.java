@@ -1,4 +1,4 @@
-package sowbreira.DB;
+package br.nnpe.cligen;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
