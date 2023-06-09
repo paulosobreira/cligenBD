@@ -1,1 +1,1 @@
-java -cp bin:libs/* sowbreira.DB.MainFrame
+java -cp bin:libs/* br.nnpe.cligen.MainFrame

@@ -1,14 +1,20 @@
 package br.nnpe.cligen.internal;
 
 import java.awt.GridLayout;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,6 +22,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
@@ -38,14 +45,16 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 	private javax.swing.JButton conectar;
 	private javax.swing.JButton abrirTabela;
 	private javax.swing.JButton executarConsulta;
-	private JComboBox<String> listaTabelas;
+	private JComboBox<String> comboListaTabelas;
+	private JTextField pesquisaTabelas;
+	private List<String> listatabelas;
 	private javax.swing.JPanel jPanelPricipal;
 	private javax.swing.JPanel jPanelComponentes;
 	private javax.swing.JPanel jPanelLabels;
-	private javax.swing.JPanel jPanel4;
+	private javax.swing.JPanel jPanelTabelasServidor;
 	private javax.swing.JPanel jPanelBotoes;
 	private javax.swing.JPanel jPanelEsquerda;
-	private javax.swing.JPanel jPanel7;
+	private javax.swing.JPanel jPanelInferior;
 	private javax.swing.JPasswordField password;
 	private javax.swing.JTextField driver;
 	private javax.swing.JTextField url;
@@ -128,17 +137,19 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		jPanelLabels = new javax.swing.JPanel();
 		jPanelComponentes = new javax.swing.JPanel();
 		dbName = new javax.swing.JComboBox();
-		listaTabelas = new JComboBox<String>();
+		comboListaTabelas = new JComboBox<String>();
+		pesquisaTabelas = new JTextField();
+		listatabelas = new ArrayList<String>();
 		driver = new javax.swing.JTextField();
 		url = new javax.swing.JTextField();
 		user = new javax.swing.JTextField();
 		password = new javax.swing.JPasswordField();
-		jPanel7 = new javax.swing.JPanel();
+		jPanelInferior = new javax.swing.JPanel();
 		jPanelBotoes = new javax.swing.JPanel();
 		conectar = new javax.swing.JButton();
 		abrirTabela = new javax.swing.JButton();
 		executarConsulta = new javax.swing.JButton();
-		jPanel4 = new javax.swing.JPanel();
+		jPanelTabelasServidor = new javax.swing.JPanel();
 		servidor = new JLabel();
 		versao = new JLabel();
 
@@ -190,7 +201,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 
 		jPanelPricipal.add(jPanelEsquerda, java.awt.BorderLayout.CENTER);
 
-		jPanel7.setLayout(new java.awt.BorderLayout());
+		jPanelInferior.setLayout(new java.awt.BorderLayout());
 
 		conectar.setText("Conectar");
 		conectar.addActionListener(new java.awt.event.ActionListener() {
@@ -219,19 +230,21 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 
 		jPanelBotoes.add(executarConsulta);
 
-		jPanel7.add(jPanelBotoes, java.awt.BorderLayout.NORTH);
+		jPanelInferior.add(jPanelBotoes, java.awt.BorderLayout.NORTH);
 
-		jPanel4.setLayout(new java.awt.GridLayout(3, 0));
+		jPanelTabelasServidor.setLayout(new java.awt.GridLayout(4, 1));
 
-		jPanel4.add(listaTabelas);
+		jPanelTabelasServidor.add(pesquisaTabelas);
 
-		jPanel4.add(servidor);
+		jPanelTabelasServidor.add(comboListaTabelas);
 
-		jPanel4.add(versao);
+		jPanelTabelasServidor.add(servidor);
 
-		jPanel7.add(jPanel4, java.awt.BorderLayout.CENTER);
+		jPanelTabelasServidor.add(versao);
 
-		jPanelPricipal.add(jPanel7, java.awt.BorderLayout.SOUTH);
+		jPanelInferior.add(jPanelTabelasServidor, java.awt.BorderLayout.CENTER);
+
+		jPanelPricipal.add(jPanelInferior, java.awt.BorderLayout.SOUTH);
 
 		getContentPane().add(jPanelPricipal, java.awt.BorderLayout.CENTER);
 		addInternalFrameListener(new InternalFrameAdapter() {
@@ -250,7 +263,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 			if (rs != null) {
 				rs.close();
 			}
-			String tableName = (String) listaTabelas.getSelectedItem();
+			String tableName = (String) comboListaTabelas.getSelectedItem();
 			PesquisaInternalFrame pesquisaInternalFrame = new PesquisaInternalFrame(null, "Sql ", stmt);
 			MainFrame.jDesktopPane1.add(pesquisaInternalFrame);
 			pesquisaInternalFrame.show();
@@ -267,7 +280,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 
 		// Add your handling code here:
 		try {
-			String tableName = (String) listaTabelas.getSelectedItem();
+			String tableName = (String) comboListaTabelas.getSelectedItem();
 
 			if (rs != null) {
 				rs.close();
@@ -308,12 +321,36 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 			DatabaseMetaData md = con.getMetaData();
 			ResultSet mrs = md.getTables(null, null, null, new String[] { "TABLE" });
 
-			while (mrs.next())
-				listaTabelas.addItem(mrs.getString(3));
+			while (mrs.next()) {
+				String nomeTabela = mrs.getString(3);
+				listatabelas.add(nomeTabela);
+				comboListaTabelas.addItem(nomeTabela);
+			}
 
 			mrs.close();
 			servidor.setText("Servidor: " + md.getDatabaseProductName());
 			versao.setText("Versão: " + md.getDatabaseProductVersion());
+			pesquisaTabelas.addKeyListener(new KeyAdapter() {
+
+				@Override
+				public void keyReleased(KeyEvent arg0) {
+					comboListaTabelas.removeAllItems();
+					if ("".equals(pesquisaTabelas.getText())) {
+						for (Iterator iterator = listatabelas.iterator(); iterator.hasNext();) {
+							String nomeTabela = (String) iterator.next();
+							comboListaTabelas.addItem(nomeTabela);
+						}
+					} else {
+						for (Iterator iterator = listatabelas.iterator(); iterator.hasNext();) {
+							String nomeTabela = (String) iterator.next();
+							if (nomeTabela.toLowerCase().contains(pesquisaTabelas.getText().toLowerCase())) {
+								comboListaTabelas.addItem(nomeTabela);
+							}
+						}
+					}
+				}
+			});
+			conectar.setEnabled(false);
 		} catch (Exception e) {
 			JTextArea ta = new JTextArea(3, 15);
 			ta.setText(e.toString());
