@@ -1,4 +1,4 @@
-package br.nnpe.cligen;
+package br.nnpe.cligen.internal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +9,8 @@ import javax.swing.JFileChooser;
 import javax.swing.ProgressMonitor;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+
+import br.nnpe.cligen.BarraSetTop;
 
 
 /**

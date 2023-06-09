@@ -1,4 +1,4 @@
-package br.nnpe.cligen;
+package br.nnpe.cligen.table;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

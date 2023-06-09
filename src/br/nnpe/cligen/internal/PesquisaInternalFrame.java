@@ -1,4 +1,4 @@
-package br.nnpe.cligen;
+package br.nnpe.cligen.internal;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -8,7 +8,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyVetoException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.JButton;
@@ -21,9 +20,14 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import br.nnpe.cligen.BarraSetTop;
+import br.nnpe.cligen.ExcelAdapter;
+import br.nnpe.cligen.MainFrame;
+import br.nnpe.cligen.table.CachingResultSetTableModel;
+import br.nnpe.cligen.table.ResultSetTableModel;
 
 /**
  * 
@@ -294,6 +298,12 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 						buffer.append(nomeCampo + " - " + tipoCampo + amodel.isNullable(i) + "\n");
 
 					}
+				}
+				if ("".equals(buffer.toString())) {
+					JTextArea ta = new JTextArea(3, 15);
+					ta.setText("Execute uma consulta Antes");
+					JOptionPane.showMessageDialog(PesquisaInternalFrame.this, ta, "Sem Campos",
+							JOptionPane.INFORMATION_MESSAGE);
 				}
 				jTextAreaCampos.setText(buffer.toString());
 

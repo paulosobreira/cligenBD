@@ -1,5 +1,8 @@
-package br.nnpe.cligen;
+package br.nnpe.cligen.internal;
 
+import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -9,6 +12,7 @@ import java.sql.Statement;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -19,6 +23,10 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
+import br.nnpe.cligen.BarraSetTop;
+import br.nnpe.cligen.MainFrame;
+import br.nnpe.cligen.table.CachingResultSetTableModel;
+
 /**
  * 
  * @author Sobreira Created on 15 de Janeiro de 2003, 15:12
@@ -26,24 +34,23 @@ import org.jdom.input.SAXBuilder;
 public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private static int numJanela;
-	private javax.swing.JCheckBox Jdbc2;
 	private javax.swing.JComboBox dbName;
 	private javax.swing.JButton conectar;
 	private javax.swing.JButton abrirTabela;
 	private javax.swing.JButton executarConsulta;
-	private javax.swing.JComboBox listaTabelas;
+	private JComboBox<String> listaTabelas;
 	private javax.swing.JPanel jPanelPricipal;
 	private javax.swing.JPanel jPanelComponentes;
 	private javax.swing.JPanel jPanelLabels;
 	private javax.swing.JPanel jPanel4;
-	private javax.swing.JPanel jPanel5;
+	private javax.swing.JPanel jPanelBotoes;
 	private javax.swing.JPanel jPanelEsquerda;
 	private javax.swing.JPanel jPanel7;
 	private javax.swing.JPasswordField password;
 	private javax.swing.JTextField driver;
 	private javax.swing.JTextField url;
 	private javax.swing.JTextField user;
-	private JLabel servidor,versao;
+	private JLabel servidor, versao;
 
 	// End of variables declaration//GEN-END:variables
 	private ResultSet rs;
@@ -54,6 +61,15 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		initComponents();
 
 		try {
+			dbName.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent arg0) {
+					preenchedadosBase(arg0.getItem().toString());
+
+				}
+
+			});
 			SAXBuilder builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser");
 			Document doc = builder.build(new File("databases.xml"));
 			Element root = doc.getRootElement();
@@ -72,6 +88,31 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		}
 	}
 
+	private void preenchedadosBase(String dbName) {
+		try {
+			if (dbName == null) {
+				return;
+			}
+			SAXBuilder builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser");
+			Document doc = builder.build(new File("databases.xml"));
+			Element root = doc.getRootElement();
+			List dbs = root.getChildren("db");
+			for (Iterator iterator = dbs.iterator(); iterator.hasNext();) {
+				Element db = (Element) iterator.next();
+				if (db.getChild("name") != null && dbName.equals(db.getChild("name").getText().trim())) {
+					driver.setText(db.getChild("dbdriver").getText().trim());
+					url.setText(db.getChild("dburl").getText().trim());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getLocalizedMessage(), "Erro de SAXParser",
+					JOptionPane.ERROR_MESSAGE);
+
+		}
+
+	}
+
 	public String getTitle() {
 		return super.getTitle() + " " + numJanela;
 	}
@@ -87,15 +128,14 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		jPanelLabels = new javax.swing.JPanel();
 		jPanelComponentes = new javax.swing.JPanel();
 		dbName = new javax.swing.JComboBox();
-		listaTabelas = new javax.swing.JComboBox();
+		listaTabelas = new JComboBox<String>();
 		driver = new javax.swing.JTextField();
 		url = new javax.swing.JTextField();
 		user = new javax.swing.JTextField();
 		password = new javax.swing.JPasswordField();
 		jPanel7 = new javax.swing.JPanel();
-		jPanel5 = new javax.swing.JPanel();
+		jPanelBotoes = new javax.swing.JPanel();
 		conectar = new javax.swing.JButton();
-		Jdbc2 = new javax.swing.JCheckBox();
 		abrirTabela = new javax.swing.JButton();
 		executarConsulta = new javax.swing.JButton();
 		jPanel4 = new javax.swing.JPanel();
@@ -114,6 +154,8 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		jPanelPricipal.setBorder(new javax.swing.border.TitledBorder("Conectar ao Banco de Dados"));
 		jPanelPricipal.setPreferredSize(new java.awt.Dimension(380, 270));
 		jPanelEsquerda.setLayout(new java.awt.BorderLayout(10, 10));
+
+		jPanelBotoes.setLayout(new GridLayout(1, 3));
 
 		jPanelLabels.setLayout(new java.awt.GridLayout(5, 0, 5, 5));
 
@@ -136,7 +178,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 
 		driver.setEditable(true);
 		jPanelComponentes.add(driver);
-		
+
 		url.setEditable(true);
 		jPanelComponentes.add(url);
 
@@ -153,47 +195,33 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		conectar.setText("Conectar");
 		conectar.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton1ActionPerformed(evt);
+				conectarAction(evt);
 			}
 		});
 
-		jPanel5.add(conectar);
-
-		Jdbc2.setText("Jdbc2");
-		jPanel5.add(Jdbc2);
+		jPanelBotoes.add(conectar);
 
 		abrirTabela.setText("Abrir Tabela");
 		abrirTabela.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton2ActionPerformed(evt);
+				abrirTabelaAction(evt);
 			}
 		});
 
-		jPanel5.add(abrirTabela);
+		jPanelBotoes.add(abrirTabela);
 
-		executarConsulta.setText("Executar Consulta");
+		executarConsulta.setText("Executar SQL");
 		executarConsulta.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton3ActionPerformed(evt);
+				executarSqlAction(evt);
 			}
 		});
 
-		jPanel5.add(executarConsulta);
+		jPanelBotoes.add(executarConsulta);
 
-		jPanel7.add(jPanel5, java.awt.BorderLayout.NORTH);
+		jPanel7.add(jPanelBotoes, java.awt.BorderLayout.NORTH);
 
 		jPanel4.setLayout(new java.awt.GridLayout(3, 0));
-
-		listaTabelas.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				Action(evt);
-			}
-		});
-		listaTabelas.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				click(evt);
-			}
-		});
 
 		jPanel4.add(listaTabelas);
 
@@ -215,7 +243,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		pack();
 	} // GEN-END:initComponents
 
-	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) { // GEN-FIRST:event_jButton3ActionPerformed
+	private void executarSqlAction(java.awt.event.ActionEvent evt) { // GEN-FIRST:event_jButton3ActionPerformed
 
 		// Add your handling code here:
 		try {
@@ -223,7 +251,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 				rs.close();
 			}
 			String tableName = (String) listaTabelas.getSelectedItem();
-			PesquisaInternalFrame pesquisaInternalFrame = new PesquisaInternalFrame(null, tableName, stmt);
+			PesquisaInternalFrame pesquisaInternalFrame = new PesquisaInternalFrame(null, "Sql ", stmt);
 			MainFrame.jDesktopPane1.add(pesquisaInternalFrame);
 			pesquisaInternalFrame.show();
 			BarraSetTop.adicionarJIntenalFrame(pesquisaInternalFrame);
@@ -235,7 +263,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		}
 	} // GEN-LAST:event_jButton3ActionPerformed
 
-	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) { // GEN-FIRST:event_jButton2ActionPerformed
+	private void abrirTabelaAction(java.awt.event.ActionEvent evt) { // GEN-FIRST:event_jButton2ActionPerformed
 
 		// Add your handling code here:
 		try {
@@ -250,13 +278,9 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 
 			PesquisaInternalFrame pesquisaInternalFrame;
 
-			if (Jdbc2.isSelected()) {
-				pesquisaInternalFrame = new PesquisaInternalFrame(new ScrollingResultSetTableModel(rs, true), tableName,
-						stmt);
-			} else {
-				pesquisaInternalFrame = new PesquisaInternalFrame(new CachingResultSetTableModel(rs, true), tableName,
-						stmt);
-			}
+			pesquisaInternalFrame = new PesquisaInternalFrame(new CachingResultSetTableModel(rs, true), tableName,
+					stmt);
+
 			MainFrame.jDesktopPane1.add(pesquisaInternalFrame);
 			pesquisaInternalFrame.show();
 			BarraSetTop.adicionarJIntenalFrame(pesquisaInternalFrame);
@@ -270,17 +294,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		}
 	} // GEN-LAST:event_jButton2ActionPerformed
 
-	private void click(java.awt.event.MouseEvent evt) { // GEN-FIRST:event_click
-
-		// Add your handling code here:
-	} // GEN-LAST:event_click
-
-	private void Action(java.awt.event.ActionEvent evt) { // GEN-FIRST:event_Action
-
-		// Add your handling code here:
-	} // GEN-LAST:event_Action
-
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) { // GEN-FIRST:event_jButton1ActionPerformed
+	private void conectarAction(java.awt.event.ActionEvent evt) { // GEN-FIRST:event_jButton1ActionPerformed
 
 		// Add your handling code here:
 		try {
@@ -289,11 +303,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 			Connection con = DriverManager.getConnection((String) url.getText(), user.getText(),
 					new String(password.getPassword()));
 
-			if (Jdbc2.isSelected()) {
-				stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			} else {
-				stmt = con.createStatement();
-			}
+			stmt = con.createStatement();
 
 			DatabaseMetaData md = con.getMetaData();
 			ResultSet mrs = md.getTables(null, null, null, new String[] { "TABLE" });

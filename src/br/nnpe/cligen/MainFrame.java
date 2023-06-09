@@ -12,6 +12,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import br.nnpe.cligen.internal.ConeccoesInternalFrame;
+import br.nnpe.cligen.internal.GeradorClassPathInternalFrame;
+
 /**
  * 
  * @author Paulo Sobreira Created on 15 de Janeiro de 2003, 15:07

@@ -6,6 +6,17 @@
 <root>
 	<db>
 		<name>
+			Mysql
+		</name>
+		<dbdriver>
+			org.gjt.mm.mysql.Driver
+		</dbdriver>
+		<dburl>
+			jdbc:mysql://172.20.100.195:3306/moodle?characterEncoding=utf8
+		</dburl>
+	</db>
+	<db>
+		<name>
 			HSQL
 		</name>
 		<dbdriver>
@@ -39,15 +50,6 @@
 	</db>
 	<db>
 		<name>
-			SqlServer 1
-		</name>
-		<dbdriver>net.sourceforge.jtds.jdbc.Driver
-		</dbdriver>
-		<dburl>jdbc:jtds:sqlserver://192.168.1.4:1433;databasename=Teste
-		</dburl>
-	</db>
-	<db>
-		<name>
 			Odbc
 		</name>
 		<dbdriver>
@@ -70,24 +72,13 @@
 	</db>
 	<db>
 		<name>
-			SqlServer 2
+			SqlServer
 		</name>
 		<dbdriver>
 			com.microsoft.jdbc.sqlserver.SQLServerDriver
 		</dbdriver>
 		<dburl>
 			jdbc:microsoft:sqlserver://localhost
-		</dburl>
-	</db>
-	<db>
-		<name>
-			Mysql
-		</name>
-		<dbdriver>
-			org.gjt.mm.mysql.Driver
-		</dbdriver>
-		<dburl>
-			jdbc:mysql://172.20.100.195:3306/moodle?characterEncoding=utf8
 		</dburl>
 	</db>
 	<db>
