@@ -26,6 +26,7 @@ import javax.swing.table.TableColumn;
 import br.nnpe.cligen.BarraSetTop;
 import br.nnpe.cligen.ExcelAdapter;
 import br.nnpe.cligen.MainFrame;
+import br.nnpe.cligen.format.BasicFormatterImpl;
 import br.nnpe.cligen.table.CachingResultSetTableModel;
 import br.nnpe.cligen.table.ResultSetTableModel;
 
@@ -33,13 +34,14 @@ import br.nnpe.cligen.table.ResultSetTableModel;
  * 
  * @author Sobreira Created on 16 de Janeiro de 2003, 13:33
  */
-public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
+public class SqlInternalFrame extends javax.swing.JInternalFrame {
 	private static int numJanela;
 
 	private Statement stmt;
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JButton atualiza;
+	private javax.swing.JButton formata;
 	private javax.swing.JScrollPane jScrollPaneResultadoPesquisa;
 	private javax.swing.JPanel botoesSQLPanel;
 	private javax.swing.JButton consulta;
@@ -51,7 +53,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 	private javax.swing.JTable jTableResultado;
 	private String tbName;
 
-	public PesquisaInternalFrame(ResultSetTableModel amodel, String aTBname, Statement astmt) {
+	public SqlInternalFrame(ResultSetTableModel amodel, String aTBname, Statement astmt) {
 		super();
 		this.tbName = aTBname;
 		numJanela++;
@@ -91,6 +93,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 		botoesSQLPanel = new javax.swing.JPanel();
 		consulta = new javax.swing.JButton();
 		atualiza = new javax.swing.JButton();
+		formata = new JButton();
 
 		setClosable(true);
 		setIconifiable(true);
@@ -127,7 +130,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 		splitPaneSup.setOneTouchExpandable(true);
 		splitPaneSup.setDividerLocation(800);
 		jPanelConsulta.add(splitPaneSup, java.awt.BorderLayout.CENTER);
-		botoesSQLPanel.setLayout(new java.awt.GridLayout(1, 0));
+		botoesSQLPanel.setLayout(new java.awt.GridLayout(1, 8));
 
 		consulta.setText("Consulta F5");
 		consulta.addActionListener(new java.awt.event.ActionListener() {
@@ -146,6 +149,15 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 		});
 
 		botoesSQLPanel.add(atualiza);
+
+		formata.setText("Formata");
+		formata.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				formata();
+			}
+		});
+
+		botoesSQLPanel.add(formata);
 
 		jPanelConsulta.add(botoesSQLPanel, java.awt.BorderLayout.SOUTH);
 
@@ -167,14 +179,28 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 		addInternalFrameListener(new InternalFrameAdapter() {
 			public void internalFrameClosing(InternalFrameEvent e) {
 				super.internalFrameClosing(e);
-				BarraSetTop.removerJIntenalFrame(PesquisaInternalFrame.this);
+				BarraSetTop.removerJIntenalFrame(SqlInternalFrame.this);
 			}
 		});
 		insereBotoesTemplates();
 	} // GEN-END:initComponents
 
+	protected void formata() {
+		String text = jTextAreaConsulta.getText();
+		BasicFormatterImpl basicFormatterImpl = new BasicFormatterImpl();
+		if (text.contains(";")) {
+			jTextAreaConsulta.setText("");
+			String[] split = text.split(";");
+			for (int i = 0; i < split.length; i++) {
+				jTextAreaConsulta.append("\n" + basicFormatterImpl.format(split[i])+";");
+			}
+		} else {
+			jTextAreaConsulta.setText(basicFormatterImpl.format(text));
+		}
+	}
+
 	private void adicionarTemplate(String string) {
-		jTextAreaConsulta.setText(string + "\n" + jTextAreaConsulta.getText());
+		jTextAreaConsulta.append("\n" + string);
 
 	}
 
@@ -302,7 +328,7 @@ public class PesquisaInternalFrame extends javax.swing.JInternalFrame {
 				if ("".equals(buffer.toString())) {
 					JTextArea ta = new JTextArea(3, 15);
 					ta.setText("Execute uma consulta Antes");
-					JOptionPane.showMessageDialog(PesquisaInternalFrame.this, ta, "Sem Campos",
+					JOptionPane.showMessageDialog(SqlInternalFrame.this, ta, "Sem Campos",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
 				jTextAreaCampos.setText(buffer.toString());

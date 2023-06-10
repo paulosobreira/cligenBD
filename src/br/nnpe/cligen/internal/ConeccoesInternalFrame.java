@@ -264,7 +264,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 				rs.close();
 			}
 			String tableName = (String) comboListaTabelas.getSelectedItem();
-			PesquisaInternalFrame pesquisaInternalFrame = new PesquisaInternalFrame(null, "Sql ", stmt);
+			SqlInternalFrame pesquisaInternalFrame = new SqlInternalFrame(null, "Sql ", stmt);
 			MainFrame.jDesktopPane1.add(pesquisaInternalFrame);
 			pesquisaInternalFrame.show();
 			BarraSetTop.adicionarJIntenalFrame(pesquisaInternalFrame);
@@ -289,9 +289,9 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 			String query = "SELECT * FROM " + tableName;
 			rs = stmt.executeQuery(query);
 
-			PesquisaInternalFrame pesquisaInternalFrame;
+			SqlInternalFrame pesquisaInternalFrame;
 
-			pesquisaInternalFrame = new PesquisaInternalFrame(new CachingResultSetTableModel(rs, true), tableName,
+			pesquisaInternalFrame = new SqlInternalFrame(new CachingResultSetTableModel(rs, true), tableName,
 					stmt);
 
 			MainFrame.jDesktopPane1.add(pesquisaInternalFrame);
