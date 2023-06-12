@@ -46,11 +46,12 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 	private javax.swing.JPanel botoesSQLPanel;
 	private javax.swing.JButton consulta;
 	private javax.swing.JPanel jPanelConsulta;
-	private javax.swing.JScrollPane jScrollPane2;
+	private javax.swing.JScrollPane jScrollPaneConsulta;
 	private javax.swing.JTextArea jTextAreaConsulta;
 	private javax.swing.JTextArea jTextAreaCampos;
 	private javax.swing.JPanel jPanelResultado;
 	private javax.swing.JTable jTableResultado;
+	private JSplitPane splitPaneSup;
 	private String tbName;
 
 	public SqlInternalFrame(ResultSetTableModel amodel, String aTBname, Statement astmt) {
@@ -88,7 +89,7 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 		jScrollPaneResultadoPesquisa = new javax.swing.JScrollPane();
 		jTableResultado = new javax.swing.JTable();
 		jPanelConsulta = new javax.swing.JPanel();
-		jScrollPane2 = new javax.swing.JScrollPane();
+		jScrollPaneConsulta = new javax.swing.JScrollPane();
 		jTextAreaConsulta = new javax.swing.JTextArea();
 		botoesSQLPanel = new javax.swing.JPanel();
 		consulta = new javax.swing.JButton();
@@ -117,18 +118,17 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 
 		jTextAreaConsulta.setRows(5);
 		jTextAreaConsulta.setBackground(MainFrame.bgColor);
-		jScrollPane2.setViewportView(jTextAreaConsulta);
+		jScrollPaneConsulta.setViewportView(jTextAreaConsulta);
 
 		jTextAreaCampos = new JTextArea(25, 18);
 		jTextAreaCampos.setBackground(MainFrame.bgColor);
 
-		JSplitPane splitPaneSup = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPane2,
-				new JScrollPane(jTextAreaCampos));
+		splitPaneSup = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneConsulta, new JScrollPane(jTextAreaCampos));
 		jTextAreaCampos.setFont(new Font("Arial", Font.BOLD, 16));
 		jTextAreaConsulta.setFont(new Font("Arial", Font.BOLD, 16));
 		splitPaneSup.setContinuousLayout(true);
 		splitPaneSup.setOneTouchExpandable(true);
-		splitPaneSup.setDividerLocation(800);
+		splitPaneSup.setDividerLocation(Integer.MAX_VALUE);
 		jPanelConsulta.add(splitPaneSup, java.awt.BorderLayout.CENTER);
 		botoesSQLPanel.setLayout(new java.awt.GridLayout(1, 8));
 
@@ -192,7 +192,7 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 			jTextAreaConsulta.setText("");
 			String[] split = text.split(";");
 			for (int i = 0; i < split.length; i++) {
-				jTextAreaConsulta.append("\n" + basicFormatterImpl.format(split[i])+";");
+				jTextAreaConsulta.append("\n" + basicFormatterImpl.format(split[i]) + ";");
 			}
 		} else {
 			jTextAreaConsulta.setText(basicFormatterImpl.format(text));
@@ -332,7 +332,9 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 							JOptionPane.INFORMATION_MESSAGE);
 				}
 				jTextAreaCampos.setText(buffer.toString());
-
+				if(splitPaneSup.getDividerLocation()==Integer.MAX_VALUE) {
+					splitPaneSup.setDividerLocation((jTextAreaConsulta.getWidth()*70)/100);
+				}
 			}
 
 		});

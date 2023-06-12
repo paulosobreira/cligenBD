@@ -6,17 +6,6 @@
 <root>
 	<db>
 		<name>
-			Mysql
-		</name>
-		<dbdriver>
-			org.gjt.mm.mysql.Driver
-		</dbdriver>
-		<dburl>
-			jdbc:mysql://172.20.100.195:3306/moodle?characterEncoding=utf8
-		</dburl>
-	</db>
-	<db>
-		<name>
 			HSQL
 		</name>
 		<dbdriver>
@@ -28,13 +17,24 @@
 	</db>
 	<db>
 		<name>
+			Mysql
+		</name>
+		<dbdriver>
+			org.gjt.mm.mysql.Driver
+		</dbdriver>
+		<dburl>
+			jdbc:mysql://localhost:3306/database?characterEncoding=utf8
+		</dburl>
+	</db>
+	<db>
+		<name>
 			Oracle
 		</name>
 		<dbdriver>
 			oracle.jdbc.driver.OracleDriver
 		</dbdriver>
 		<dburl>
-			jdbc:oracle:thin:@128.1.0.62:1521:prod
+			jdbc:oracle:thin:@localhost:1521:sid
 		</dburl>
 	</db>
 	<db>
@@ -45,7 +45,7 @@
 			org.postgresql.Driver
 		</dbdriver>
 		<dburl>
-			jdbc:postgresql://192.168.1.11/UniDesenv
+			jdbc:postgresql://localhost/database
 		</dburl>
 	</db>
 	<db>
@@ -57,17 +57,6 @@
 		</dbdriver>
 		<dburl>
 			jdbc:odbc:simples
-		</dburl>
-	</db>
-	<db>
-		<name>
-			Pointbase
-		</name>
-		<dbdriver>
-			com.pointbase.jdbc.jdbcDriver
-		</dbdriver>
-		<dburl>
-			jdbc:pointbase:corejava
 		</dburl>
 	</db>
 	<db>
