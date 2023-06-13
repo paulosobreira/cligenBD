@@ -2,11 +2,20 @@ package br.nnpe.cligen.internal;
 
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyVetoException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -54,7 +63,7 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 	private JSplitPane splitPaneSup;
 	private String tbName;
 
-	public SqlInternalFrame(ResultSetTableModel amodel, String aTBname, Statement astmt) {
+	public SqlInternalFrame(ResultSetTableModel amodel, String aTBname, Statement astmt) throws IOException {
 		super();
 		this.tbName = aTBname;
 		numJanela++;
@@ -70,8 +79,18 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 		pack();
 		try {
 			setSelected(true);
-		} catch (PropertyVetoException e) {
+			lerSql();
+		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void lerSql() throws IOException {
+		BufferedReader in = new BufferedReader(new FileReader("sql" + File.separator + this.getTitle() + ".sql"));
+		String readLine = in.readLine();
+		while (readLine != null) {
+			jTextAreaConsulta.append(readLine);
+			readLine = in.readLine();
 		}
 	}
 
@@ -100,13 +119,12 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 		setIconifiable(true);
 		setMaximizable(true);
 		setResizable(true);
-		jPanelResultado.setLayout(new java.awt.BorderLayout());
+		jPanelResultado.setLayout(new GridLayout(1, 1));
 		new ExcelAdapter(jTableResultado);
 		jTableResultado.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {}, new String[] {}));
 		jScrollPaneResultadoPesquisa.setViewportView(jTableResultado);
 		jTableResultado.setAutoCreateRowSorter(true);
 
-		jTableResultado.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		jTableResultado.getModel().addTableModelListener(new TableModelListener() {
 
 			public void tableChanged(TableModelEvent e) {
@@ -123,7 +141,8 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 		jTextAreaCampos = new JTextArea(25, 18);
 		jTextAreaCampos.setBackground(MainFrame.bgColor);
 
-		splitPaneSup = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneConsulta, new JScrollPane(jTextAreaCampos));
+		splitPaneSup = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneConsulta,
+				new JScrollPane(jTextAreaCampos));
 		jTextAreaCampos.setFont(new Font("Arial", Font.BOLD, 16));
 		jTextAreaConsulta.setFont(new Font("Arial", Font.BOLD, 16));
 		splitPaneSup.setContinuousLayout(true);
@@ -332,8 +351,8 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 							JOptionPane.INFORMATION_MESSAGE);
 				}
 				jTextAreaCampos.setText(buffer.toString());
-				if(splitPaneSup.getDividerLocation()==Integer.MAX_VALUE) {
-					splitPaneSup.setDividerLocation((jTextAreaConsulta.getWidth()*70)/100);
+				if (splitPaneSup.getDividerLocation() == Integer.MAX_VALUE) {
+					splitPaneSup.setDividerLocation((jTextAreaConsulta.getWidth() * 70) / 100);
 				}
 			}
 
@@ -378,7 +397,7 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 			String query = jTextAreaConsulta.getSelectedText();
 
 			if ("".equals(query) || (query == null)) {
-				throw new Exception("Selecione uma consulta");
+				query = jTextAreaConsulta.getText();
 			}
 			if (query.indexOf(";") != -1) {
 				query = query.replace(";", "");
@@ -387,11 +406,18 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 			ResultSet rs = stmt.executeQuery(query);
 			jTableResultado.setModel(new CachingResultSetTableModel(rs));
 			initColumnSizes(jTableResultado);
+			salvarConsulta(query);
 		} catch (Exception e) {
 			JTextArea ta = new JTextArea(3, 15);
 			ta.setText(e.toString());
 			JOptionPane.showMessageDialog(this, ta, "Erro SQL", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	private void salvarConsulta(String query) throws FileNotFoundException {
+		PrintStream out = new PrintStream(new FileOutputStream("sql" + File.separator + this.getTitle() + ".sql"));
+		out.print(query);
+		out.close();
 	}
 
 	// End of variables declaration//GEN-END:variables
