@@ -1,13 +1,10 @@
 package br.nnpe.cligen.internal;
 
 import java.awt.GridLayout;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -40,8 +37,8 @@ import br.nnpe.cligen.table.CachingResultSetTableModel;
  */
 public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private static int numJanela;
-	private javax.swing.JComboBox dbName;
+	public static int NUM_JANELA;
+	private JComboBox<String> dbName;
 	private javax.swing.JButton conectar;
 	private javax.swing.JButton abrirTabela;
 	private javax.swing.JButton executarConsulta;
@@ -66,12 +63,11 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 	private Statement stmt;
 
 	public ConeccoesInternalFrame() {
-		numJanela++;
+		NUM_JANELA++;
 		initComponents();
 
 		try {
 			dbName.addItemListener(new ItemListener() {
-
 				@Override
 				public void itemStateChanged(ItemEvent arg0) {
 					preenchedadosBase(arg0.getItem().toString());
@@ -123,7 +119,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 	}
 
 	public String getTitle() {
-		return super.getTitle() + " " + numJanela;
+		return super.getTitle() + " " + NUM_JANELA;
 	}
 
 	private void initComponents() { // GEN-BEGIN:initComponents
@@ -131,7 +127,7 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 		jPanelEsquerda = new javax.swing.JPanel();
 		jPanelLabels = new javax.swing.JPanel();
 		jPanelComponentes = new javax.swing.JPanel();
-		dbName = new javax.swing.JComboBox();
+		dbName = new JComboBox<String>();
 		comboListaTabelas = new JComboBox<String>();
 		pesquisaTabelas = new JTextField();
 		listatabelas = new ArrayList<String>();
@@ -179,7 +175,6 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 
 		jPanelComponentes.setLayout(new java.awt.GridLayout(5, 0, 5, 5));
 
-		dbName.setEditable(true);
 		jPanelComponentes.add(dbName);
 
 		driver.setEditable(true);
@@ -259,7 +254,15 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 				rs.close();
 			}
 			String tableName = (String) comboListaTabelas.getSelectedItem();
-			SqlInternalFrame pesquisaInternalFrame = new SqlInternalFrame(null, "Sql ", stmt);
+			SqlInternalFrame pesquisaInternalFrame;
+			try {
+				NUM_JANELA++;
+				pesquisaInternalFrame = new SqlInternalFrame(null, "Sql ", stmt);
+			} catch (Exception e) {
+				NUM_JANELA--;
+				throw e;
+			}
+
 			MainFrame.jDesktopPane1.add(pesquisaInternalFrame);
 			pesquisaInternalFrame.show();
 			BarraSetTop.adicionarJIntenalFrame(pesquisaInternalFrame);
@@ -286,7 +289,13 @@ public class ConeccoesInternalFrame extends javax.swing.JInternalFrame {
 
 			SqlInternalFrame pesquisaInternalFrame;
 
-			pesquisaInternalFrame = new SqlInternalFrame(new CachingResultSetTableModel(rs, true), tableName, stmt);
+			try {
+				NUM_JANELA++;
+				pesquisaInternalFrame = new SqlInternalFrame(new CachingResultSetTableModel(rs, true), tableName, stmt);
+			} catch (Exception e) {
+				NUM_JANELA--;
+				throw e;
+			}
 
 			MainFrame.jDesktopPane1.add(pesquisaInternalFrame);
 			pesquisaInternalFrame.show();

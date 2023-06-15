@@ -7,10 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.beans.PropertyVetoException;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import javax.swing.JButton;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -27,6 +28,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableCellRenderer;
@@ -44,7 +46,6 @@ import br.nnpe.cligen.table.ResultSetTableModel;
  * @author Sobreira Created on 16 de Janeiro de 2003, 13:33
  */
 public class SqlInternalFrame extends javax.swing.JInternalFrame {
-	private static int numJanela;
 
 	private Statement stmt;
 
@@ -66,7 +67,6 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 	public SqlInternalFrame(ResultSetTableModel amodel, String aTBname, Statement astmt) throws IOException {
 		super();
 		this.tbName = aTBname;
-		numJanela++;
 		initComponents();
 		this.setTitle(aTBname);
 
@@ -76,6 +76,56 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 		}
 		stmt = astmt;
 		setVisible(true);
+		addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (JInternalFrame.IS_MAXIMUM_PROPERTY.equals(evt.getPropertyName())) {
+					spliDivCampos();
+				}
+			}
+		});
+		addInternalFrameListener(new InternalFrameListener() {
+
+			@Override
+			public void internalFrameOpened(InternalFrameEvent e) {
+				spliDivCampos();
+			}
+
+			@Override
+			public void internalFrameIconified(InternalFrameEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void internalFrameDeiconified(InternalFrameEvent e) {
+				spliDivCampos();
+			}
+
+			@Override
+			public void internalFrameDeactivated(InternalFrameEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void internalFrameClosing(InternalFrameEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void internalFrameClosed(InternalFrameEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void internalFrameActivated(InternalFrameEvent e) {
+				spliDivCampos();
+			}
+		});
 		pack();
 		try {
 			setSelected(true);
@@ -85,8 +135,18 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 		}
 	}
 
+	private void spliDivCampos() {
+		int setentaPorcento = (this.getWidth() * 70) / 100;
+		if ("".equals(jTextAreaCampos.getText())) {
+			splitPaneSup.setDividerLocation(Integer.MAX_VALUE);
+		} else if (setentaPorcento != splitPaneSup.getDividerLocation()) {
+			splitPaneSup.setDividerLocation(setentaPorcento);
+		}
+	}
+
 	private void lerSql() throws IOException {
-		BufferedReader in = new BufferedReader(new FileReader("sql" + File.separator + this.getTitle() + ".sql"));
+		BufferedReader in = new BufferedReader(
+				new FileReader("sql" + File.separator + this.getTitle().split(" ")[0] + ".sql"));
 		String readLine = in.readLine();
 		while (readLine != null) {
 			jTextAreaConsulta.append(readLine);
@@ -95,7 +155,7 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 	}
 
 	public String getTitle() {
-		return super.getTitle() + " " + numJanela;
+		return super.getTitle() + " " + ConeccoesInternalFrame.NUM_JANELA;
 	}
 
 	/**
@@ -351,9 +411,7 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 							JOptionPane.INFORMATION_MESSAGE);
 				}
 				jTextAreaCampos.setText(buffer.toString());
-				if (splitPaneSup.getDividerLocation() == Integer.MAX_VALUE) {
-					splitPaneSup.setDividerLocation((jTextAreaConsulta.getWidth() * 70) / 100);
-				}
+				spliDivCampos();
 			}
 
 		});
@@ -398,6 +456,9 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 
 			if ("".equals(query) || (query == null)) {
 				query = jTextAreaConsulta.getText();
+				if(query.contains(";")) {
+					throw new Exception("Selecione uma consulta");
+				}
 			}
 			if (query.indexOf(";") != -1) {
 				query = query.replace(";", "");
@@ -406,7 +467,7 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 			ResultSet rs = stmt.executeQuery(query);
 			jTableResultado.setModel(new CachingResultSetTableModel(rs));
 			initColumnSizes(jTableResultado);
-			salvarConsulta(query);
+			salvarConsulta();
 		} catch (Exception e) {
 			JTextArea ta = new JTextArea(3, 15);
 			ta.setText(e.toString());
@@ -414,9 +475,10 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 		}
 	}
 
-	private void salvarConsulta(String query) throws FileNotFoundException {
-		PrintStream out = new PrintStream(new FileOutputStream("sql" + File.separator + this.getTitle() + ".sql"));
-		out.print(query);
+	private void salvarConsulta() throws FileNotFoundException {
+		PrintStream out = new PrintStream(
+				new FileOutputStream("sql" + File.separator + this.getTitle().split(" ")[0] + ".sql"));
+		out.print(jTextAreaConsulta.getText());
 		out.close();
 	}
 
