@@ -456,7 +456,7 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 
 			if ("".equals(query) || (query == null)) {
 				query = jTextAreaConsulta.getText();
-				if(query.contains(";")) {
+				if (query.contains(";") && query.split(";").length > 1) {
 					throw new Exception("Selecione uma consulta");
 				}
 			}
