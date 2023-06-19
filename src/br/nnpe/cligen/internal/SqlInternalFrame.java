@@ -149,7 +149,7 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 				new FileReader("sql" + File.separator + this.getTitle().split(" ")[0] + ".sql"));
 		String readLine = in.readLine();
 		while (readLine != null) {
-			jTextAreaConsulta.append(readLine);
+			jTextAreaConsulta.append(readLine + "\n");
 			readLine = in.readLine();
 		}
 	}
@@ -269,9 +269,9 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 		BasicFormatterImpl basicFormatterImpl = new BasicFormatterImpl();
 		if (text.contains(";")) {
 			jTextAreaConsulta.setText("");
-			String[] split = text.split(";");
+			String[] split = text.trim().split(";");
 			for (int i = 0; i < split.length; i++) {
-				jTextAreaConsulta.append("\n" + basicFormatterImpl.format(split[i]) + ";");
+				jTextAreaConsulta.append(basicFormatterImpl.format(split[i]) + ";\n");
 			}
 		} else {
 			jTextAreaConsulta.setText(basicFormatterImpl.format(text));
@@ -456,9 +456,10 @@ public class SqlInternalFrame extends javax.swing.JInternalFrame {
 
 			if ("".equals(query) || (query == null)) {
 				query = jTextAreaConsulta.getText();
-				if (query.contains(";") && query.split(";").length > 1) {
-					throw new Exception("Selecione uma consulta");
-				}
+			}
+
+			if (query.contains(";") && query.trim().split(";").length>1 ) {
+				throw new Exception("Selecione uma consulta");
 			}
 			if (query.indexOf(";") != -1) {
 				query = query.replace(";", "");
