@@ -1,1 +1,1 @@
-java -cp bin:libs/* br.nnpe.cligen.MainFrame
+java -cp target/cligenDB-jar-with-dependencies.jar:libs/* br.nnpe.cligen.MainFrame

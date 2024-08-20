@@ -105,7 +105,7 @@ public class MainFrame extends javax.swing.JFrame {
 				String msg = "Feito por Paulo Sobreira \n"
 						+ "sowbreira@gmail.com.br \n"
 						+ "https://sowbreira-26fe1.firebaseapp.com/ \n"
-						+ "Janeiro de 2003 - Junho 2023";
+						+ "Janeiro de 2003";
 				JOptionPane.showMessageDialog(MainFrame.this, msg, "Sobre",
 						JOptionPane.INFORMATION_MESSAGE);
 			}

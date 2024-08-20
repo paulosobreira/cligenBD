@@ -42,5 +42,15 @@ O Resultado selecionado na tabela também pode ser exportado para o programa de 
 
 Para auxilar na adição de novos drivers, o programa possui um gerador de classpath bastando apenas informar o diretório onde estão as libs.
 
-[Baixar o CliGenBD.](https://sowbreira-26fe1.firebaseapp.com/cligenbd/cligenBD.zip)
+## Requerimentos
+
+- Para executar o jogo é necessário Java 11
+- Para rodar uma instância do jogo no Windows execute run.bat
+- Para rodar uma instância do jogo no linux execute run.sh
+
+## Informação técnica
+
+- Construção Maven
+    - mvn clean package
+
 
