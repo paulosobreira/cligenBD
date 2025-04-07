@@ -75,7 +75,7 @@ public class MainFrame extends javax.swing.JFrame {
 		jMenu4 = new javax.swing.JMenu();
 		jMenuItem2 = new javax.swing.JMenuItem();
 
-		setTitle("CliGenBD Cliente Genérico de Banco de Dados");
+		setTitle("CliGenBD Cliente Genérico de Banco de Dados 04-2025");
 		setBackground(new java.awt.Color(0, 0, 0));
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -105,7 +105,7 @@ public class MainFrame extends javax.swing.JFrame {
 				String msg = "Feito por Paulo Sobreira \n"
 						+ "sowbreira@gmail.com.br \n"
 						+ "https://sowbreira-26fe1.firebaseapp.com/ \n"
-						+ "Janeiro de 2003";
+						+ "Janeiro de 2003 / abril 2025";
 				JOptionPane.showMessageDialog(MainFrame.this, msg, "Sobre",
 						JOptionPane.INFORMATION_MESSAGE);
 			}
